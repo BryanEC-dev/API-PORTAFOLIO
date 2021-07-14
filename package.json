@@ -2,9 +2,10 @@
   "name": "portafolio",
   "version": "1.0.0",
   "description": "api con informacion personal",
-  "main": "index.js",
+  "main": "api/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start" : "nodemon api/index.js"
   },
   "keywords": [
     "portafolio"
@@ -12,6 +13,7 @@
   "author": "Bryan Silva <bryan_silva_ec@outlook.com>",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "log4js": "^6.3.0"
   }
 }
