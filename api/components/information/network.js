@@ -3,7 +3,7 @@ const router = express.Router();
 const controller = require('./controller')
 const sucess_response = require('../../../response/succes')
 
-router.get('/', function (req,res) {
+router.get('/', function (req,res,next) {
     data = controller.get();
     return sucess_response.success(req,res,data,200)
 })
