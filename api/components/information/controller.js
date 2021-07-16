@@ -1,10 +1,8 @@
+const mongo = require('../../../store/mongo');
 
 function get(){
-    return {
-        'info' : {
-            'name' : 'Bryan'
-        }
-    }
+    return mongo.list('information')
+    
 }
 
 module.exports = {

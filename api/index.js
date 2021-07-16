@@ -6,6 +6,8 @@ const information_route = require('./components/information/network')
 
 app = express();
 
+app.use(express.json());
+
 
 app.use(router);
 app.use('/information',information_route)
