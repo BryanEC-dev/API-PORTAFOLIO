@@ -1,8 +1,6 @@
-const { logger } = require("../log");
+const logger = require('../log')
 const { error } = require("../response/error");
 
-
-const response = require
 
 function logErrors(err, req, res,next) {
     console.error(err.stack);
@@ -10,15 +8,15 @@ function logErrors(err, req, res,next) {
 }
 
 function clientErrorHandler(err, req, res, next){
-    if(req.xhr) {
-        logger.error(err)
-        error(req, res,`Ha ocurrido un error intente mas tarde ${err.message}`,500)
-    }
-    next(err)
+    console.log('clientErrorHandler');
+    logger.info(err)
+    error(req, res,'Ha ocurrido un error intente mas tarde',500,err.message)
+    /* next(err) */
 }
 
 function errorHandler(err, req, res, next) {
-        next(err);
+    console.log('errorHandler');
+    next(err);
 }
 
 module.exports = {

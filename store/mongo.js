@@ -36,6 +36,40 @@ async function list(_collection) {
     
 }
 
+async function listQuery(_collection,query) {
+    try {
+    
+        db = await connect();
+        const collection = db.collection(_collection);
+        const findResult = await collection.find(query).toArray();
+        client.close()
+        return findResult;
+        
+    } catch (error) {
+        console.log(error);
+        client.close()
+    }
+    
+}
+
+async function save(_collection,data){
+    /* try {
+        db = await connect();
+        const collection = db.collection(_collection);
+        const insertResult = await collection.insertOne(data)
+        console.log('Inserted documents =>',insertResult.insertedId )
+        return insertResult.insertedId
+    } catch (error) {
+        console.log(error);
+        client.close()
+    } */
+
+    return true;
+   
+}
+
 module.exports = {
     list,
+    save,
+    listQuery,
 }

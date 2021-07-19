@@ -2,14 +2,29 @@ const express = require('express');
 const userRouter = express.Router();
 const controller = require('./controller')
 const sucess_response = require('../../../response/succes')
+const {userIDSchema,
+    userSchema,} = require('./model')
+
+const validation = require('../../../middlewares/validateHandler')
 
 userRouter.route('/')
-.get( (req,res,next) => {
-    data = []
-    return sucess_response.success(req,res,data,200)
+.get( async (req,res,next) => {
+    try {
+        data = await controller.get()
+        return sucess_response.success(req,res,data,200)
+    } catch (error) {
+        next(error) 
+    }
+    
 })
-.post( function (req,res,next) {
-    sucess_response.success(req,res,'ok',200)  
+.post( validation(userSchema) ,async function (req,res,next) {
+    try {
+        message = await controller.post(req.body)
+        sucess_response.success(req,res,message,201)  
+    } catch (error) {
+        next(error)
+    }
+    
 })
 
 userRouter.route('/:id')
