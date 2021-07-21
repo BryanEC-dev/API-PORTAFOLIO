@@ -1,3 +1,4 @@
+require('dotenv').config()
 module.exports = {
     log : {
         logger_level : process.env.LOGGER_LEVEL || 'debug'
@@ -11,5 +12,8 @@ module.exports = {
         DB_HOST: 'localhost',
         DB_PORT: '27017',
         DB_NAME: 'briefcase',
+    },
+    jwt : {
+        authJwt : process.env.AUTH_JWT_SECRET,
     }
 }

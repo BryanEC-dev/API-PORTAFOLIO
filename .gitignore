@@ -1,2 +1,3 @@
 node_modules/
-portafolio.log
+briefcase.log
+.env

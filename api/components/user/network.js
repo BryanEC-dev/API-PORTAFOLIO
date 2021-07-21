@@ -1,17 +1,22 @@
 const express = require('express');
 const userRouter = express.Router();
 const controller = require('./controller')
-const sucess_response = require('../../../response/succes')
+const {success} = require('../../../response/succes')
 const {userIDSchema,
     userSchema,} = require('./model')
 
-const validation = require('../../../middlewares/validateHandler')
+const validation = require('../../../middlewares/validateHandler');
+const passport = require('passport');
+const { verifyUser } = require('../../../middlewares/authenticateHandler');
+
+
+
 
 userRouter.route('/')
-.get( async (req,res,next) => {
-    try {
+.get(verifyUser, async (req,res,next) => {
+   try {
         data = await controller.get()
-        return sucess_response.success(req,res,data,200)
+        return success(req,res,data,200)
     } catch (error) {
         next(error) 
     }

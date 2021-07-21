@@ -4,10 +4,11 @@ const config = require('../config')
 const router = express.Router();
 const informationRoute = require('./components/information/network')
 const userRouter = require('./components/user/network')
+const auth = require('./components/auth/network');
 const {logErrors,
     clientErrorHandler,
     errorHandler,
-} = require('../middlewares/errorHandler')
+} = require('../middlewares/errorHandler');
 
 app = express();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(router);
 app.use('/information',informationRoute)
 app.use('/user',userRouter)
+app.use('/auth',auth)
 
 app.use(logErrors);
 app.use(clientErrorHandler);

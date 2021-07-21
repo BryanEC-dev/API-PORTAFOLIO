@@ -76,4 +76,5 @@ module.exports = {
     post,
     update,
     remove,
+    getQuery,
 }

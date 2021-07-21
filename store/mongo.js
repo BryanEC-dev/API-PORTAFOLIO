@@ -53,7 +53,7 @@ async function listQuery(_collection,query) {
 }
 
 async function save(_collection,data){
-    /* try {
+    try {
         db = await connect();
         const collection = db.collection(_collection);
         const insertResult = await collection.insertOne(data)
@@ -62,8 +62,7 @@ async function save(_collection,data){
     } catch (error) {
         console.log(error);
         client.close()
-    } */
-
+    }
     return true;
    
 }

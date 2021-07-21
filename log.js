@@ -2,7 +2,7 @@ const log4js = require("log4js");
 
 
 log4js.configure({
-    appenders: { portafolio: { type: "file", filename: "portfolio.log" } },
+    appenders: { portafolio: { type: "file", filename: "briefcase.log" } },
     categories: { default: { appenders: ["portafolio"], level: "debug" } }
   });
 
