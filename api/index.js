@@ -9,7 +9,9 @@ const {logErrors,
     clientErrorHandler,
     errorHandler,
 } = require('../middlewares/errorHandler');
-
+console.log(
+    'comence a leer el archivo'
+);
 app = express();
 
 app.use(express.json());
@@ -27,5 +29,6 @@ app.use(errorHandler);
 
 
 app.listen(config.api.port, () => {
+    console.log(`Api corriendo en el puerto ${config.api.port} `);
     logger.info(`Api corriendo en el puerto ${config.api.port} `)
 });

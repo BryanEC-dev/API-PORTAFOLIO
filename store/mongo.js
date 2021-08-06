@@ -21,11 +21,16 @@ async function connect() {
     
 }
 
-async function list(_collection) {
+async function list(_collection,_id= null) {
     try {
         db = await connect();
         const collection = db.collection(_collection);
-        const findResult = await collection.find({}).toArray();
+        let findResult = null;
+        if(_id == null){
+            findResult = await collection.find({}).toArray();
+        }else{
+            findResult = await collection.find({'_id' : ObjectId(_id)}).toArray();
+        }
         client.close()
         return findResult;
         
@@ -66,9 +71,38 @@ async function save(_collection,data){
     return true;
    
 }
+// TODO que pasa si hay un error
+async function remove(_collection,id){
+    try {
+        db = await connect();
+        const collection = db.collection(_collection);
+        const removeResult = await collection.deleteOne({'_id' : id})
+        console.log('Inserted documents =>',removeResult )
+        return removeResult
+    } catch (error) {
+        console.log(error);
+        client.close()
+    }
+}
+
+async function update(_collection,id,data){
+    try {
+        db = await connect();
+        const collection =  db.collection(_collection);
+        console.log(id,data);
+        const updateResult = await collection.updateOne({'_id' : id} , {$set :data});
+        console.log(updateResult);
+        return updateResult;
+    } catch (error) {
+        console.log(error);
+        client.close()
+    }
+}
 
 module.exports = {
     list,
     save,
     listQuery,
+    remove,
+    update,
 }

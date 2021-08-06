@@ -8,9 +8,10 @@ async function get(id = null){
     try {
         if(id == null){
             data = await mongo.list(COLLECTION)
-            console.log(data);
             return data
         }
+        data = await mongo.list(COLLECTION)
+            return data
     } catch (error) {
         throw new Error(error)
     }
@@ -38,7 +39,9 @@ async function post(data){
 
         user = await getQuery(cleanData)
         if(!user.length) {
-            save = await mongo.save(COLLECTION, cleanData);
+            save = await mongo.save(COLLECTION, {
+            username : data.username,  
+        });
     
             if(save){
                 console.log(typeof(save));
@@ -62,13 +65,34 @@ async function post(data){
     
 }
 
-function update(){
-    
+async function update(id,data){
+    try {
+        
+       updateUser = await mongo.update(COLLECTION,id,{"username":  data.username}) 
+       if(updateUser.modifiedCount){
+        
+        updateAuth = await mongo.update('auth', id, {
+            username : data.username,
+            password : await bcrypt.hash(data.password,saltRounds),
+            admin : false,
+        });
+
+        return {'update1' :updateUser.modifiedCount,'update2' : updateAuth.modifiedCount }
+
+       } 
+    } catch (error) {
+        throw new Error(error)  
+    }
 }
 
 
-function remove(){
-    
+async function remove(id){
+    try {
+        data = await mongo.remove(COLLECTION, id);
+        return data;
+    } catch (error) {
+        throw new Error(error)
+    }
 }
 
 module.exports = {

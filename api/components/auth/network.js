@@ -11,37 +11,13 @@ require("../../../auth/strategies/basic");
 
 auth.post("/token", authenticate, async function(req, res, next) {
   try {
-    success(req,res,token,200)
+    console.log('llegue a la url', req.token);
+    return success(req,res,req.token,200)
   } catch (error) {
-    
+    next(error)
   }
+})
   
-
-/*  passport.authenticate("basic", function(error, user) {
-    try {
-      console.info("ya pase por passport")
-      console.log(error,user)
-
-      if (error || !user || user == undefined) {
-        success(req,res,'unauthorized',401)
-      }
-
-      req.login(user, { session: false }, async function(error) {
-        if (error) {
-          next(error);
-        }
-
-        const payload = { sub: user[0].username };
-        const token = jwt.sign(payload, config.jwt.authJwt, {
-          expiresIn: "15m"
-        });
-        success(req,res,token,200)
-      });
-    } catch (error) {
-      next(error);
-    }
-  })(req, res, next); */
-}); 
 
 
 

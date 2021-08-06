@@ -14,9 +14,6 @@ require("../auth/strategies/basic");
 exports.verifyUser = function(req,res,next){
   passport.authenticate("jwt", function(error, user) {
     try {
-      console.info("ya pase por passport")
-      console.log(error,user)
-
       if (error || !user || user == undefined) {
         success(req,res,'unauthorized',401)
       }
@@ -52,7 +49,7 @@ exports.authenticate = function (req,res,next) {
             }
             
             
-            const payload = { sub: user[0].username };
+            const payload = { sub: user[0].username, id :user[0]._id  };
             const token = jwt.sign(payload, config.jwt.authJwt, {
               expiresIn: "15m"
             });
