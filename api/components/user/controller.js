@@ -4,13 +4,9 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const COLLECTION = 'user'
 
-async function get(id = null){
+async function get(id){
     try {
-        if(id == null){
-            data = await mongo.list(COLLECTION)
-            return data
-        }
-        data = await mongo.list(COLLECTION)
+        data = await mongo.list(COLLECTION,id)
             return data
     } catch (error) {
         throw new Error(error)

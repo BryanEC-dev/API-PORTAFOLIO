@@ -1,4 +1,6 @@
-const { MongoClient } = require('mongodb')
+const { MongoClient, ObjectId} = require('mongodb')
+
+
 const config = require('../config')
 
 
@@ -23,13 +25,14 @@ async function connect() {
 
 async function list(_collection,_id= null) {
     try {
+        
         db = await connect();
         const collection = db.collection(_collection);
         let findResult = null;
         if(_id == null){
             findResult = await collection.find({}).toArray();
         }else{
-            findResult = await collection.find({'_id' : ObjectId(_id)}).toArray();
+            findResult = await collection.find({'_id' : new ObjectId(_id) }).toArray();
         }
         client.close()
         return findResult;
@@ -57,13 +60,23 @@ async function listQuery(_collection,query) {
     
 }
 
-async function save(_collection,data){
+async function save(_collection,data,idValidation = false ){
     try {
+        informationData = null;
+        if(idValidation){
+            informationData = await list(_collection,data._id)
+        }
+        console.log('information: ',informationData.length);
+        if(informationData.length != 0){
+            return false
+        }
+        
         db = await connect();
         const collection = db.collection(_collection);
         const insertResult = await collection.insertOne(data)
-        console.log('Inserted documents =>',insertResult.insertedId )
-        return insertResult.insertedId
+        console.log('Inserted documents =>',insertResult)
+        return insertResult.acknowledged
+
     } catch (error) {
         console.log(error);
         client.close()
@@ -90,7 +103,7 @@ async function update(_collection,id,data){
         db = await connect();
         const collection =  db.collection(_collection);
         console.log(id,data);
-        const updateResult = await collection.updateOne({'_id' : id} , {$set :data});
+        const updateResult = await collection.updateOne({'_id' :  new ObjectId(id)} , {$set :data});
         console.log(updateResult);
         return updateResult;
     } catch (error) {

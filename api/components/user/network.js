@@ -8,16 +8,16 @@ const {userIDSchema,
 
 const validation = require('../../../middlewares/validateHandler');
 const passport = require('passport');
-const { verifyUser } = require('../../../middlewares/authenticateHandler');
+const { verifyUser, verifyAdmin } = require('../../../middlewares/authenticateHandler');
 const { response } = require('express');
 
 
 
 
 userRouter.route('/')
-.get(async (req,res,next) => {
+.get(verifyUser,async (req,res,next) => {
    try {
-        data = await controller.get()
+        data = await controller.get(req.user._id)
         return success(req,res,data,200)
     } catch (error) {
         next(error) 
@@ -30,8 +30,7 @@ userRouter.route('/')
         success(req,res,message,201)  
     } catch (error) {
         next(error)
-    }
-     
+    }   
  })
  .put(verifyUser,validation(userSchema), async (req,res,next) => {
     try {
@@ -95,8 +94,38 @@ userRouter.route('/')
      
  })
 
-
-
-
+ userRouter.route('/all/admin')
+ .get(verifyUser,verifyAdmin, async (req,res,next) => {
+    try {
+         data = await controller.get()
+         return success(req,res,data,200)
+     } catch (error) {
+         next(error) 
+     }
+     
+ })
+ .post( async (req,res,next) => {
+    try {
+        success(req,res,'Method post not allowed',405)  
+    } catch (error) {
+        next(error)
+    }
+ })
+ .put( async (req,res,next) => {
+    try {
+        success(req,res,'Method put not allowed',405)  
+    } catch (error) {
+        next(error)
+    }
+     
+ })
+ .delete( async (req,res,next) => {
+    try {
+        success(req,res,'Method delete not allowed',405)  
+    } catch (error) {
+        next(error)
+    }
+     
+ })
 
 module.exports = userRouter;

@@ -2,6 +2,7 @@ const passport = require('passport');
 const jwt = require("jsonwebtoken");
 const config = require('../config');
 const { success } = require('../response/succes');
+const { error } = require('../response/error');
 
 // jwt strategy
 require('../auth/strategies/jwt')
@@ -29,7 +30,6 @@ exports.verifyUser = function(req,res,next){
     }
   })(req, res, next);
   
-  
 }
 
 exports.authenticate = function (req,res,next) {
@@ -51,7 +51,7 @@ exports.authenticate = function (req,res,next) {
             
             const payload = { sub: user[0].username, id :user[0]._id  };
             const token = jwt.sign(payload, config.jwt.authJwt, {
-              expiresIn: "15m"
+              expiresIn: "90m"
             });
             req.token = token
             next()
@@ -61,4 +61,15 @@ exports.authenticate = function (req,res,next) {
          
         }
       })(req, res, next);
+}
+
+
+exports.verifyAdmin = function(req,res,next){
+  if(!req.user.admin){
+    //error(req, res, "Unauthorized", 403, "Unauthorized")
+    next(error)
+  }
+
+  return next()
+  
 }
