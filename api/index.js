@@ -4,6 +4,8 @@ const config = require('../config')
 const router = express.Router();
 const informationRoute = require('./components/information/network')
 const userRouter = require('./components/user/network')
+const skillRouter = require('./components/skills/network')
+const proyectRouter = require('./components/proyects/network')
 const auth = require('./components/auth/network');
 const {logErrors,
     clientErrorHandler,
@@ -21,6 +23,8 @@ app.use(router);
 app.use('/information',informationRoute)
 app.use('/user',userRouter)
 app.use('/auth',auth)
+app.use('/proyect',proyectRouter)
+app.use('/skill',skillRouter)
 
 app.use(logErrors);
 app.use(clientErrorHandler);
