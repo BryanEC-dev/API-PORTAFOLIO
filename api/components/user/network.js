@@ -5,7 +5,7 @@ const {success} = require('../../../response/succes')
 const {error} = require('../../../response/error')
 const {userIDSchema,
     userSchema} = require('./model')
-
+const logger = require('../../../log')
 const validation = require('../../../middlewares/validateHandler');
 const passport = require('passport');
 const { verifyUser, verifyAdmin } = require('../../../middlewares/authenticateHandler');
@@ -16,9 +16,10 @@ const { response } = require('express');
 
 userRouter.route('/')
 .get(verifyUser,async (req,res,next) => {
+    logger.info('realizando consulta')
    try {
         data = await controller.get(req.user._id)
-        return success(req,res,data,200)
+        return success(req,res,data,200, 'Consulta realiza con éxito')
     } catch (error) {
         next(error) 
     }
@@ -26,8 +27,13 @@ userRouter.route('/')
 })
 .post(validation(userSchema), async (req,res,next) => {
     try {
-        message = await controller.post(req.body)
-        success(req,res,message,201)  
+        responseMethod = await controller.post(req.body)
+
+        if(responseMethod.register){
+            success(req,res,body = {},201,responseMethod.message)  
+        }else {
+            error(req,res,response.message,500)
+        }
     } catch (error) {
         next(error)
     }   
@@ -35,11 +41,13 @@ userRouter.route('/')
  .put(verifyUser,validation(userSchema), async (req,res,next) => {
     try {
         
-        response = await controller.update(req.user._id,req.body)
-        if(response.user && response.auth){
-            success(req,res,'Actualización realizada con éxito',200)  
+        responseMethod = await controller.update(req.user._id,req.body)
+        
+        if(responseMethod.user || responseMethod.auth){
+            success(req,res,body={},200, 'Actualización realizada con éxito')  
+        }else{
+            error(req,res,'Ha ocurrido un error intente mas tarde',500, 'No se pudo realizar la actualización')
         }
-            error(req,res,'Error al realizar la actualización',500)
             
     } catch (error) {
         next(error)
@@ -48,9 +56,14 @@ userRouter.route('/')
  })
  .delete(verifyUser, async (req,res,next) => {
     try {
-        data = await controller.remove(req.user._id)
         console.log('id: ',req.user._id);
-        success(req,res,'usuario eliminado',200)  
+        responseMethod = await controller.remove(req.user._id)
+        if(responseMethod){
+            success(req,res,'usuario eliminado',200)  
+        }else{
+            error(req,res, 'Hubo un error al eliminar la información del usuario')
+        }
+        
     } catch (error) {
         next(error)
     }
@@ -58,7 +71,7 @@ userRouter.route('/')
  })
 
  userRouter.route('/:id')
-.get(async (req,res,next) => {
+.get(verifyUser,verifyAdmin,async (req,res,next) => {
     try {
         data = await controller.get(req.params.id)
         return success(req,res,data,200) 
@@ -75,11 +88,9 @@ userRouter.route('/')
     }
      
  })
- .put(verifyUser, async (req,res,next) => {
+ .put( async (req,res,next) => {
     try {
-        log( req.user)
-        response = controller.update(req.user._id,req.body)
-        success(req,res,'Actualización realizada con éxito',405)  
+        success(req,res,'Method post not allowed',405)  
     } catch (error) {
         next(error)
     }

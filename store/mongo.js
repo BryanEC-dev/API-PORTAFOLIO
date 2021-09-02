@@ -62,7 +62,7 @@ async function listQuery(_collection,query) {
 
 async function save(_collection,data,idValidation = false ){
     try {
-        informationData = null;
+        /* informationData = null;
         if(idValidation){
             informationData = await list(_collection,data._id)
         }
@@ -70,12 +70,12 @@ async function save(_collection,data,idValidation = false ){
         if(informationData.length != 0){
             return false
         }
-        
+         */
         db = await connect();
         const collection = db.collection(_collection);
         const insertResult = await collection.insertOne(data)
         console.log('Inserted documents =>',insertResult)
-        return insertResult.acknowledged
+        return insertResult
 
     } catch (error) {
         console.log(error);

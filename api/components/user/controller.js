@@ -28,32 +28,56 @@ async function getQuery(parameter){
     Guarda un usuario en la BD en la colección user y auth
 */
 async function post(data){
+    let auth = {}
+    let user = {}
     try {
         cleanData = {
             username : data.username,  
         }
 
-        user = await getQuery(cleanData)
-        if(!user.length) {
-            save = await mongo.save(COLLECTION, {
+        userExists = await getQuery(cleanData)
+        if(!userExists.length) {
+            user = await mongo.save(COLLECTION, {
             username : data.username,  
-        });
-    
-            if(save){
-                console.log(typeof(save));
-                auth = {
-                    _id : save,
+            });
+
+            console.log('usuario registrado', user)
+            if(user.acknowledged){
+               
+                authData = {
+                    _id : user.insertedId,
                     username : data.username,
                     password : await bcrypt.hash(data.password,saltRounds),
                     admin : false,
                 }
     
-                save = mongo.save('auth', auth);
+                auth = await mongo.save('auth', authData);
+                console.log('auth',auth);
            }
-            return 'Registro realizado con éxito'
+
+          
+            
+
+            
+           if(user.acknowledged && auth.acknowledged){
+               console.log('primer if');
+            return {register : true, message: "Registro realizado con exito "}
+            
+          }else if(user.acknowledged){
+            // eliminar el usuario de la tabla user
+            console.log('2 if');
+            return {register : false, message: "Hubo un error al realizar el registro "}
+            
+          }else{
+            console.log('3 if');
+            return {register : false, message: "Hubo un error al realizar el registro "}
+
+            
+          } 
         }
         
-        return 'El usuario ya se encuentra registrado'
+        return {register : true, message: "El usuario ya se encuentra registrado"}
+       
 
     } catch (error) {
         throw new Error(error)
@@ -64,18 +88,18 @@ async function post(data){
 async function update(id,data){
     try {
         
-       updateUser = await mongo.update(COLLECTION,id,{"username":  data.username}) 
-       if(updateUser.modifiedCount){
-        
+        updateUser = await mongo.update(COLLECTION,id,{"username":  data.username}) 
+       
         updateAuth = await mongo.update('auth', id, {
             username : data.username,
             password : await bcrypt.hash(data.password,saltRounds),
             admin : false,
         });
 
-        return {'update1' :updateUser.modifiedCount,'update2' : updateAuth.modifiedCount }
 
-       } 
+        return {'user' :updateUser.modifiedCount,'auth' : updateAuth.modifiedCount }
+
+       
     } catch (error) {
         throw new Error(error)  
     }
@@ -84,8 +108,16 @@ async function update(id,data){
 
 async function remove(id){
     try {
-        data = await mongo.remove(COLLECTION, id);
-        return data;
+        user = await mongo.remove(COLLECTION, id);
+        auth = await mongo.remove('auth', id);
+        console.log(user)
+        console.log(auth)
+
+        if (user.deletedCount && auth.deletedCount){
+            return true
+        }
+
+        return false;
     } catch (error) {
         throw new Error(error)
     }
