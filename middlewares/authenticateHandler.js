@@ -17,6 +17,7 @@ exports.verifyUser = function(req,res,next){
     try {
       if (error || !user || user == undefined) {
         success(req,res,'unauthorized',401)
+        return
       }
 
       req.login(user, { session: false }, async function(error) {

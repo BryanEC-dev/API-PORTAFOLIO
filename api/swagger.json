@@ -30,7 +30,7 @@
         "tags": [
           "user"
         ],
-        "summary": "Retorna la información del usuario",
+        "summary": "Retorna la información básica del usuario",
         "description": "Retorna la información básica del usuario que realiza la consulta",
         "operationId": "listUser",
         "produces": [
@@ -41,6 +41,12 @@
             "description": "successful operation",
             "schema": {
               "$ref": "#/definitions/ApiResponseSucces"
+            }
+          },
+          "401": {
+            "description": "unauthorized operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseUnauthorized"
             }
           }
         }
@@ -109,6 +115,12 @@
               "$ref": "#/definitions/ApiResponseSucces"
             }
           },
+          "401": {
+            "description": "unauthorized operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseUnauthorized"
+            }
+          },
           "500": {
             "description": "Error operation",
             "schema": {
@@ -169,6 +181,12 @@
             "schema": {
               "$ref": "#/definitions/ApiResponseSucces"
             }
+          },
+          "401": {
+            "description": "unauthorized operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseUnauthorized"
+            }
           }
         }
       }
@@ -189,6 +207,117 @@
             "description": "successful operation",
             "schema": {
               "$ref": "#/definitions/ApiResponseSucces"
+            }
+          },
+          "401": {
+            "description": "unauthorized operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseUnauthorized"
+            }
+          }
+        }
+      }
+    },
+    "/information": {
+      "get": {
+        "tags": [
+          "information"
+        ],
+        "summary": "Retorna la informació del usuario",
+        "description": "Retorna la información del usuario que realiza la consulta",
+        "operationId": "listInformation",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseSucces"
+            }
+          },
+          "401": {
+            "description": "unauthorized operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseUnauthorized"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "information"
+        ],
+        "summary": "Agrega información al perfil del usuario",
+        "description": "Agrega información general al perfil del usuario",
+        "operationId": "AddInformation",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "información adicional",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Information"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseSucces"
+            }
+          },
+          "401": {
+            "description": "unauthorized operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseUnauthorized"
+            }
+          },
+          "500": {
+            "description": "Error operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseError"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "information"
+        ],
+        "summary": "Actualiza la información de un usuario",
+        "description": "actualiza los datos de un perfil de usuario",
+        "operationId": "updateInformation",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "información adicional",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Information"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseSucces"
+            }
+          },
+          "500": {
+            "description": "Error operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseError"
             }
           }
         }
@@ -226,6 +355,35 @@
         "name": "User"
       }
     },
+    "Information": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "profesion": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "linkedin": {
+          "type": "string"
+        },
+        "github": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Information"
+      }
+    },
     "ApiResponseSucces": {
       "type": "object",
       "properties": {
@@ -259,6 +417,21 @@
           "type": "string"
         },
         "message": {
+          "type": "string"
+        }
+      }
+    },
+    "ApiResponseUnauthorized": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "body": {
           "type": "string"
         }
       }

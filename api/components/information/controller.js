@@ -20,15 +20,14 @@ async function getQuery(parameter){
     }
    
 }
-/* 
-    Guarda un usuario en la BD en la colección user y auth
-*/
+
+
 async function post(data, id){
     try {
 
         save = await mongo.save(COLLECTION, data,true);
         console.log('controller: ', save );
-        if(!save){
+        if(!save.acknowledged){
             return false;
         }
         return true
@@ -46,7 +45,7 @@ async function update(id,data){
        if(updateUser.modifiedCount){
         return updateUser.modifiedCount
        } 
-       return updateUser.modifiedCount
+       return false
     } catch (error) {
         throw new Error(error)  
     }

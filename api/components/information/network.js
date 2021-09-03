@@ -10,12 +10,12 @@ router.get('/',verifyUser, async function (req,res,next) {
     try {
         data = await controller.get(req.user._id)
         console.log(data);
-        if(data == []){
-            response = {"Message" : "No existen datos del usuario"}
+        if(data){
+            message = "No existe información del usuario"
         }else{
-            response = {"Message" : "Consulta realizada con exito", "data" : data}
+            message = "Consulta realizada con exito"
         }
-        success(req,res,response,200)  
+        success(req,res,data,200,message)  
     } catch (error) {
         next(error)
     }
@@ -25,13 +25,13 @@ router.get('/',verifyUser, async function (req,res,next) {
         req.body._id = req.user._id
         response = await controller.post(req.body)
         if(response){
-            response = {"Message" : "Registro creado con éxito"}
+            message = "Registro creado con éxito"
             status = 201
         }else{
-            response = {"Message" : "La información ya se encuentra ingresada"}
+            message = "La información del usuario ya se encuentra registrada" 
             status = 200
         }
-        success(req,res,response,status)  
+        success(req,res,body={},status,message)  
     } catch (error) {
         next(error)
     }
@@ -40,14 +40,13 @@ router.get('/',verifyUser, async function (req,res,next) {
     try {
 
         response = await controller.update(req.user._id, req.body)
-        console.log("response:", response);
-        if(response == 0){
-            response = {"message": "No hay datos que actualizar"}
+        if(response){
+            message = "Actualización realizada con éxito"
         }else{
-            response = {"message": "Actualización realizada con éxito"}
+            message = "Los datos se encuentran actualizados"
 
         }
-        success(req,res,response,200)  
+        success(req,res,body={},200,message) 
             
         
     } catch (error) {
