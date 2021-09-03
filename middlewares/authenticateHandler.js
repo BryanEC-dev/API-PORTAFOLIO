@@ -52,7 +52,7 @@ exports.authenticate = function (req,res,next) {
             
             const payload = { sub: user[0].username, id :user[0]._id  };
             const token = jwt.sign(payload, config.jwt.authJwt, {
-              expiresIn: "90m"
+              expiresIn: "12000m"
             });
             req.token = token
             next()

@@ -23,14 +23,24 @@ async function getQuery(parameter){
 /* 
     Guarda un usuario en la BD en la colección user y auth
 */
-async function post(data, id){
+async function post(data){
     try {
+
+        query = { "userId" :data.userId, "type": data.type }
+        console.log(query);
+        getQuery = await mongo.listQuery(COLLECTION, query);
+        console.log('getquery: ',getQuery);
+        if(getQuery.length != 0){
+            console.log('Entre al false');
+            return false
+        }
+
 
         save = await mongo.save(COLLECTION, data,true);
         console.log('controller: ', save );
         if(!save){
             return false;
-        }
+        } 
         return true
 
     } catch (error) {
@@ -42,11 +52,49 @@ async function post(data, id){
 async function update(id,data){
     try {
         
-       updateUser = await mongo.update(COLLECTION,id,data) 
+        query = { "userId" :id, "type": data.type }
+        console.log(query);
+        
+        getQuery = await mongo.listQuery(COLLECTION, query);
+        console.log('getquery: ',getQuery, getQuery.length);
+        
+        if(!getQuery.length){
+            console.log('Entre al false');
+            return false
+        }
+
+       updateUser = await mongo.updateQuery(COLLECTION,query,data) 
        if(updateUser.modifiedCount){
-        return updateUser.modifiedCount
+        return true
        } 
-       return updateUser.modifiedCount
+       return 'no'
+       
+    } catch (error) {
+        throw new Error(error)  
+    }
+}
+
+
+async function remove(id,type){
+    try {
+        
+        query = { "userId" :id, "type": type }
+        console.log(query);
+        
+        getQuery = await mongo.listQuery(COLLECTION, query);
+        console.log('getquery: ',getQuery, getQuery.length);
+        
+        if(!getQuery.length){
+            console.log('Entre al false');
+            return false
+        }
+
+       deleteSkill = await mongo.deleteQuery(COLLECTION,query) 
+       if(deleteSkill.deletedCount){
+        return true
+       } 
+      
+       
     } catch (error) {
         throw new Error(error)  
     }
@@ -59,4 +107,5 @@ module.exports = {
     post,
     update,
     getQuery,
+    remove,
 }

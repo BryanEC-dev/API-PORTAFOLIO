@@ -11,9 +11,9 @@ router.get('/',verifyUser, async function (req,res,next) {
         data = await controller.get(req.user._id)
         console.log(data);
         if(data){
-            message = "No existe información del usuario"
+            message = "Consulta realizada con éxito"
         }else{
-            message = "Consulta realizada con exito"
+            message = "No existe información del usuario"
         }
         success(req,res,data,200,message)  
     } catch (error) {

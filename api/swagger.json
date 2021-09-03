@@ -19,6 +19,10 @@
     {
       "name": "user",
       "description": "Operaciones sobre el usuario"
+    },
+    {
+      "name": "information",
+      "description": "informacion sobre el usuario"
     }
   ],
   "schemes": [
@@ -322,6 +326,177 @@
           }
         }
       }
+    },
+    "/skill": {
+      "get": {
+        "tags": [
+          "skill"
+        ],
+        "summary": "información de la habilidades",
+        "description": "Retorna la información de las habilidades del usuario que realiza la consulta",
+        "operationId": "listSkill",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseSucces"
+            }
+          },
+          "401": {
+            "description": "unauthorized operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseUnauthorized"
+            }
+          },
+          "404": {
+            "description": "unauthorized operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseError"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "skill"
+        ],
+        "summary": "Agrega información de las habilidades",
+        "description": "Agrega información de las habilidades al perfil del usuario que se encuentra logeado",
+        "operationId": "AddSkill",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "información adicional",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Skill"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseSucces"
+            }
+          },
+          "401": {
+            "description": "unauthorized operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseUnauthorized"
+            }
+          },
+          "500": {
+            "description": "Error operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseError"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "skill"
+        ],
+        "summary": "Actualiza las habilidades",
+        "description": "actualiza los datos de las habilidades del perfil del usuario que se encuentra logeado",
+        "operationId": "updateSkill",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "información adicional",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Skill"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseSucces"
+            }
+          },
+          "401": {
+            "description": "unauthorized operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseUnauthorized"
+            }
+          },
+          "404": {
+            "description": "unauthorized operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseError"
+            }
+          },
+          "500": {
+            "description": "Error operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "skill"
+        ],
+        "summary": "eliina habilidades",
+        "description": "Elimina una de las habilidades del usuario",
+        "operationId": "delteSkill",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "información adicional",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SkillDelete"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseSucces"
+            }
+          },
+          "401": {
+            "description": "unauthorized operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseUnauthorized"
+            }
+          },
+          "404": {
+            "description": "unauthorized operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseError"
+            }
+          },
+          "500": {
+            "description": "Error operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponseError"
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -353,6 +528,44 @@
       },
       "xml": {
         "name": "User"
+      }
+    },
+    "Skill": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "frontend",
+            "backend",
+            "soft skill"
+          ]
+        }
+      },
+      "xml": {
+        "name": "Skill"
+      }
+    },
+    "SkillDelete": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "frontend",
+            "backend",
+            "soft skill"
+          ]
+        }
+      },
+      "xml": {
+        "name": "Skill"
       }
     },
     "Information": {

@@ -112,10 +112,38 @@ async function update(_collection,id,data){
     }
 }
 
+async function updateQuery(_collection,query,data){
+    try {
+        db = await connect();
+        const collection =  db.collection(_collection);
+        const updateResult = await collection.updateOne(query , {$set :data});
+        console.log(updateResult);
+        return updateResult;
+    } catch (error) {
+        console.log(error);
+        client.close()
+    }
+}
+
+async function deleteQuery(_collection,query){
+    try {
+        db = await connect();
+        const collection =  db.collection(_collection);
+        const result = await collection.deleteOne(query);
+        console.log(result);
+        return result;
+    } catch (error) {
+        console.log(error);
+        client.close()
+    }
+}
+
 module.exports = {
     list,
     save,
     listQuery,
     remove,
     update,
+    updateQuery,
+    deleteQuery
 }
