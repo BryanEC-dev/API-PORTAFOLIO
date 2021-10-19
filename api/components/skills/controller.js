@@ -63,8 +63,8 @@ async function update(id,data){
             return false
         }
 
-       updateUser = await mongo.updateQuery(COLLECTION,query,data) 
-       if(updateUser.modifiedCount){
+       updateSkill = await mongo.updateQuery(COLLECTION,query,data) 
+       if(updateSkill.modifiedCount){
         return true
        } 
        return 'no'

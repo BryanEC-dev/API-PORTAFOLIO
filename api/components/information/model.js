@@ -1,8 +1,8 @@
 const Joi = require('joi')
 
-userIDSchema = Joi.string().regex(/^[0-9a-fA-F]{24}$/);
+let userIDSchema = Joi.string().regex(/^[0-9a-fA-F]{24}$/);
 
-informationSchema = Joi.object({
+let informationSchema = Joi.object({
     name: Joi.string()
         .alphanum()
         .case('lower')
@@ -20,7 +20,7 @@ informationSchema = Joi.object({
         /* .any() */
         .case('lower')
         .min(5)
-        .max(30)
+        .max(60)
         .required(),
     country: Joi.string()
         .alphanum()

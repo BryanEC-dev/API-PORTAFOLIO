@@ -1,8 +1,8 @@
 const Joi = require('joi')
 
-userIDSchema = Joi.string().regex(/^[0-9a-fA-F]{24}$/);
+let userIDSchema = Joi.string().regex(/^[0-9a-fA-F]{24}$/);
 
-proyectSchema = Joi.object({
+let proyectSchema = Joi.object({
     name: Joi.string()
         .case('lower')
         .min(3)
@@ -24,11 +24,22 @@ proyectSchema = Joi.object({
         .min(5)
         .max(50)
         .required(),
+    technologies: Joi.array()
     
+        
+})
+
+let proyectSchemaDelete = Joi.object({
+    name: Joi.string()
+        .case('lower')
+        .min(3)
+        .max(30)
+        .required(),
         
 })
 
 module.exports = {
     userIDSchema,
     proyectSchema,
+    proyectSchemaDelete,
 }
